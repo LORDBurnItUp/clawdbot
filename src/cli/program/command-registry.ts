@@ -17,6 +17,7 @@ import { registerOnboardCommand } from "./register.onboard.js";
 import { registerSetupCommand } from "./register.setup.js";
 import { registerStatusHealthSessionsCommands } from "./register.status-health-sessions.js";
 import { registerSubCliCommands } from "./register.subclis.js";
+import { registerVoiceCommands } from "./register.voice.js";
 import type { ProgramContext } from "./context.js";
 
 type CommandRegisterParams = {
@@ -138,6 +139,10 @@ export const commandRegistry: CommandRegistration[] = [
     register: ({ program, ctx }) =>
       registerAgentCommands(program, { agentChannelOptions: ctx.agentChannelOptions }),
     routes: [routeAgentsList],
+  },
+  {
+    id: "voice",
+    register: ({ program }) => registerVoiceCommands(program),
   },
   {
     id: "subclis",
