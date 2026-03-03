@@ -29,6 +29,14 @@ const loadConfig = async (): Promise<ClawdbotConfig> => {
 
 const entries: SubCliEntry[] = [
   {
+    name: "ai",
+    description: "Multi-model AI brain setup and proactive overnight mode",
+    register: async (program) => {
+      const mod = await import("../ai-cli.js");
+      mod.registerAiCli(program);
+    },
+  },
+  {
     name: "acp",
     description: "Agent Control Protocol tools",
     register: async (program) => {
