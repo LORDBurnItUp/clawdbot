@@ -3,28 +3,27 @@ set -e
 
 echo "Starting Hostinger Setup for Clawdbot..."
 
-# Install node version manager + node 22 if not present
-if ! command -v node >/dev/null 2>&1 || ! node -v | grep -q "^v2[2-9]" ; then
-    echo "Installing Node.js..."
-    if command -v apt-get >/dev/null 2>&1; then
-        curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - || true
-        sudo apt-get install -y nodejs || true
-    fi
-fi
+# Hostinger often has Node.js/pnpm already. Check if they exist.
+# If not, try to install locally or skip system-level installs.
 
-# Install pnpm
+# pnpm install (global if possible, but local otherwise)
 if ! command -v pnpm >/dev/null 2>&1; then
-    echo "Installing pnpm..."
-    npm install -g pnpm
+    echo "Installing pnpm locally..."
+    npm install pnpm || true
+    PNPM_BIN="./node_modules/.bin/pnpm"
+else
+    PNPM_BIN="pnpm"
 fi
 
 echo "Installing dependencies..."
-pnpm install
+$PNPM_BIN install
 
 echo "Building..."
-pnpm build
+$PNPM_BIN build
 
-echo "Installing globally..."
-npm install -g .
+echo "Installing globally (user bin)..."
+# In shared hosting, npm install -g might fail. Try --prefix
+npm install -g . --prefix=$HOME/.local || true
+export PATH=$PATH:$HOME/.local/bin
 
 echo "Setup complete! You can now run 'clawdbot onboard' or 'swagclaw onboard'."
