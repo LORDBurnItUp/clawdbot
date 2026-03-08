@@ -10,7 +10,8 @@
     "./plugin-sdk/*": "./dist/plugin-sdk/*"
   },
   "bin": {
-    "clawdbot": "dist/entry.js"
+    "clawdbot": "dist/entry.js",
+    "swagclaw": "dist/entry.js"
   },
   "files": [
     "dist/acp/**",
